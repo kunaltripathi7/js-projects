@@ -1,23 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      const endpoint =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+      // since we want to filter store in an array
+      let data = [];
+      fetch(endpoint)
+        .then((response) => response.json()) // api responds in a readable stream which we convert to json
+        // .then((entry) => entry.forEach((obj) => data.push(obj)));
+        .then((entry) => data.push(...entry));
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+      const form = document.querySelector(".search");
+      const list = document.querySelector(".suggestions");
+      form.addEventListener("input", handleUpdate); // input event fires everytime value of input field changes
 
-</script>
-</body>
+      function handleUpdate(e) {
+        e.preventDefault(); // auto submit
+        const inputValue = e.target.value;
+        const searchResults = data.filter((obj) =>
+          obj.city.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        updateResults(searchResults);
+      }
+
+      function updateResults(results) {
+        const markup = results.reduce(
+          (acc, obj) =>
+            acc +
+            `<li> <span>${obj.city}</span> <span>${obj.population}</span></li>`,
+          ``
+        );
+        // could have done it with map & join
+        list.innerHTML = ``;
+        list.innerHTML = markup;
+        // list.insertAdjacentHTML("afterBegin", markup);
+      }
+    </script>
+  </body>
 </html>
