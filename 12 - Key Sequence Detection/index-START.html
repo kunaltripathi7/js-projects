@@ -3,10 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <title>Key Detection</title>
+    <!-- type helps the browser to recognize what language is used in script -->
     <script type="text/javascript" src="./cornify.js"></script>
     <link rel="icon" href="https://fav.farm/🔥" />
   </head>
   <body>
-    <script></script>
+    <script>
+      const secretCode = "firefox";
+      const pressed = [];
+
+      window.addEventListener("keyup", function (e) {
+        pressed.push(e.key);
+        // going from the end cuz the latest words are added there
+        pressed.splice(
+          -secretCode.length - 1,
+          pressed.length - secretCode.length
+        );
+        if (pressed.join("").includes(secretCode)) cornify_add(); // global func.
+      });
+    </script>
   </body>
 </html>
