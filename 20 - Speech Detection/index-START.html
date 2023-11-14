@@ -1,62 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Speech Detection</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Speech Detection</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <div class="words" contenteditable></div>
 
-  <div class="words" contenteditable>
-  </div>
+    <script>
+      // web speech api  || speech rec obj
+      const recognition = new (window.SpeechRecognition ||
+        window.webkitSpeechRecognition)();
+      const txtBox = document.querySelector(".words");
+      let p = document.createElement("p"); // adds a node to the end
+      txtBox.appendChild(p); // appends to the end
+      recognition.interimresults = true; // continuous updation u don't need to stop speaking
+      recognition.start();
+      // other way of handling events in js(event prprties on recognition) || setting callback func's on event prprties || the func gets called when event occurs
+      recognition.onresult = (e) => {
+        // it stops the recognition after getting the result
+        // console.log(e.results);
+        const results = Array.from(e.results);
+        const str = results.reduce((acc, curr) => acc + curr[0].transcript, "");
 
-<script>
-  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        // can add different functionalities like if the transcript contains weather get the weather function.
+        p.textContent = str;
+        if (e.results[0].isFinal) {
+          p = document.createElement("p");
+          txtBox.appendChild(p);
+        }
+        // txtBox.textContent = transcript;
+      };
+      recognition.addEventListener("end", recognition.start);
+    </script>
 
+    <style>
+      html {
+        font-size: 10px;
+      }
 
-</script>
+      body {
+        background: #ffc600;
+        font-family: "helvetica neue";
+        font-weight: 200;
+        font-size: 20px;
+      }
 
+      .words {
+        max-width: 500px;
+        margin: 50px auto;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
+        padding: 1rem 2rem 1rem 5rem;
+        background: -webkit-gradient(
+            linear,
+            0 0,
+            0 100%,
+            from(#d9eaf3),
+            color-stop(4%, #fff)
+          )
+          0 4px;
+        background-size: 100% 3rem;
+        position: relative;
+        line-height: 3rem;
+      }
 
-  <style>
-    html {
-      font-size: 10px;
-    }
+      p {
+        margin: 0 0 3rem;
+      }
 
-    body {
-      background: #ffc600;
-      font-family: 'helvetica neue';
-      font-weight: 200;
-      font-size: 20px;
-    }
-
-    .words {
-      max-width: 500px;
-      margin: 50px auto;
-      background: white;
-      border-radius: 5px;
-      box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
-      padding: 1rem 2rem 1rem 5rem;
-      background: -webkit-gradient(linear, 0 0, 0 100%, from(#d9eaf3), color-stop(4%, #fff)) 0 4px;
-      background-size: 100% 3rem;
-      position: relative;
-      line-height: 3rem;
-    }
-
-    p {
-      margin: 0 0 3rem;
-    }
-
-    .words:before {
-      content: '';
-      position: absolute;
-      width: 4px;
-      top: 0;
-      left: 30px;
-      bottom: 0;
-      border: 1px solid;
-      border-color: transparent #efe4e4;
-    }
-  </style>
-
-</body>
+      .words:before {
+        content: "";
+        position: absolute;
+        width: 4px;
+        top: 0;
+        left: 30px;
+        bottom: 0;
+        border: 1px solid;
+        border-color: transparent #efe4e4;
+      }
+    </style>
+  </body>
 </html>

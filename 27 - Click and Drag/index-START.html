@@ -1,42 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Click and Drag</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
-  <div class="items">
-    <div class="item item1">01</div>
-    <div class="item item2">02</div>
-    <div class="item item3">03</div>
-    <div class="item item4">04</div>
-    <div class="item item5">05</div>
-    <div class="item item6">06</div>
-    <div class="item item7">07</div>
-    <div class="item item8">08</div>
-    <div class="item item9">09</div>
-    <div class="item item10">10</div>
-    <div class="item item11">11</div>
-    <div class="item item12">12</div>
-    <div class="item item13">13</div>
-    <div class="item item14">14</div>
-    <div class="item item15">15</div>
-    <div class="item item16">16</div>
-    <div class="item item17">17</div>
-    <div class="item item18">18</div>
-    <div class="item item19">19</div>
-    <div class="item item20">20</div>
-    <div class="item item21">21</div>
-    <div class="item item22">22</div>
-    <div class="item item23">23</div>
-    <div class="item item24">24</div>
-    <div class="item item25">25</div>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Click and Drag</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <div class="items">
+      <div class="item item1">01</div>
+      <div class="item item2">02</div>
+      <div class="item item3">03</div>
+      <div class="item item4">04</div>
+      <div class="item item5">05</div>
+      <div class="item item6">06</div>
+      <div class="item item7">07</div>
+      <div class="item item8">08</div>
+      <div class="item item9">09</div>
+      <div class="item item10">10</div>
+      <div class="item item11">11</div>
+      <div class="item item12">12</div>
+      <div class="item item13">13</div>
+      <div class="item item14">14</div>
+      <div class="item item15">15</div>
+      <div class="item item16">16</div>
+      <div class="item item17">17</div>
+      <div class="item item18">18</div>
+      <div class="item item19">19</div>
+      <div class="item item20">20</div>
+      <div class="item item21">21</div>
+      <div class="item item22">22</div>
+      <div class="item item23">23</div>
+      <div class="item item24">24</div>
+      <div class="item item25">25</div>
+    </div>
 
-<script>
-</script>
+    <script>
+      const container = document.querySelector(".items");
+      let startX, scrollLeft; //
+      let isDragging = false; // for handling a mouse down
 
+      function handleStart(e) {
+        isDragging = true;
+        container.classList.add("active");
+        container.classList.add("active");
+        startX = e.pageX - container.offsetLeft; // pageX considers horizontal scroll - container's margin if any to left
+        scrollLeft = container.scrollLeft; // storing in var cuz it dynamically changes so we need to remember the start position
+      }
+
+      function handleCalc() {
+        isDragging = false;
+        container.classList.remove("active");
+      }
+
+      // how to know that the mouse has gone out of the div -> mouseleave event
+
+      function handleLeave() {}
+      function updateDist(e) {
+        if (!isDragging) return;
+        // calc total distance from start
+        let x = e.pageX - container.offsetLeft; // e.clientX relative to viewport doesn't inlcude horizontal scroll
+        const walk = (x - startX) * 3;
+        container.scrollLeft = scrollLeft - walk;
+      }
+
+      function handleQuit() {
+        isDragging = false;
+        container.classList.remove("active");
+      }
+      container.addEventListener("mousedown", handleStart);
+      container.addEventListener("mouseup", handleCalc);
+      container.addEventListener("mousemove", updateDist);
+      container.addEventListener("mouseleave", handleQuit);
+    </script>
   </body>
 </html>
+
+<!-- Key Takeaway :
+This math is the thing how u understand things are working under the hood, how libraries work.
+Mistake -> Req -> 0 to some value which will tell how much to scroll left -->

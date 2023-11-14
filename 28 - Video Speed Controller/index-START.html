@@ -1,21 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Video Speed Scrubber</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="https://fav.farm/🔥" />
-</head>
-<body>
-
-  <div class="wrapper">
-    <video class="flex" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" loop controls></video>
-    <div class="speed">
-      <div class="speed-bar">1×</div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Video Speed Scrubber</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <video
+        class="flex"
+        width="765"
+        height="430"
+        src="VfE_html5.mp4"
+        loop
+        controls
+      ></video>
+      <div class="speed">
+        <div class="speed-bar">1×</div>
+      </div>
     </div>
-  </div>
 
-<script>
-</script>
-</body>
+    <script>
+      const speedCont = document.querySelector(".speed");
+      const speedBar = document.querySelector(".speed-bar");
+      const video = document.querySelector(".flex");
+      // const contHeight = speedCont.offsetHeight;
+      const walk = 4;
+      function handlePlayback(e) {
+        const position =
+          Math.ceil((e.offsetY / this.offsetHeight) * walk * 10) / 10; // use this
+        video.playbackRate = position;
+        speedBar.style.height = `${(position / 4) * 100}%`;
+        speedBar.textContent = `${position}x`;
+      }
+
+      speedCont.addEventListener("mousemove", handlePlayback);
+    </script>
+  </body>
 </html>
+
+<!-- Same Standard problem -> I have a range 0 - ele's height 
+need to convert it to 0 to 4 how??
+divide it by height -> (you get 0-1 range) * max of range -->
